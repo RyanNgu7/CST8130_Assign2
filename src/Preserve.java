@@ -7,6 +7,8 @@
  * @author/Professor: James Mwangi PhD. 
  * 
   */
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -42,14 +44,16 @@ public class Preserve extends FoodItem {
 	 * @param scanner A scanner object used to read in user input.
 	 * @return true if the program successfully reads in all fields.
 	 */
-    public boolean addItem(Scanner scanner) {
-    	super.addItem(scanner);															// Prompt user to fill in default data member fields
+    public boolean addItem(Scanner scanner, boolean fromFile) {
+    	super.addItem(scanner, fromFile);												// Prompt user to fill in default data member fields
     	
     	// Get size in millilitres
 		boolean validData = false;														// Flag that indicates whether or not the data is valid
 		while (validData == false) {													// loop until the data is valid
 			try {
-				System.out.print("Enter the size of the jar in millilitres: ");			// Display prompt to user
+				if (fromFile == false) {
+					System.out.print("Enter the size of the jar in millilitres: ");		// Display prompt to user
+				}
 				jarSize = scanner.nextInt();											// Take in user input
 				scanner.nextLine();														// Clear "\n" from buffer
 				
@@ -66,4 +70,21 @@ public class Preserve extends FoodItem {
 		}
     	return true;
     }
+    
+    @Override
+    /**
+	 * {@inheritDoc}
+	 * <p>
+	 * Also writes p to signify the item is a preserve and
+	 * the jar size.
+	 * </p>
+	 * 
+	 * @param writer The FileWriter used to write to a file.
+	 * @throws IOException
+	 */
+	public void outputItem(FileWriter writer) throws IOException {
+		writer.write("p\n");			// Write p to signify the item is a preserve
+    	super.outputItem(writer);		// Write the data members common to all FoodItem objects
+    	writer.write(jarSize + "\n");	// Write the jar size to the file
+	}
 }

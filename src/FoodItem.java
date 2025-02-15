@@ -7,6 +7,9 @@
  * @author/Professor: James Mwangi PhD. 
  * 
   */
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 /**
@@ -71,16 +74,19 @@ public class FoodItem implements Comparable<FoodItem> {
 	 * code, name, quantity, cost, price.
 	 * For each data member, loop until user enters a valid value.
 	 * 
+	 * @param fromFile Indicates whether or not the scanner is reading from a file.
 	 * @param scanner A Scanner object used to read in user input.
 	 * @return true if the program successfully reads in all fields, otherwise returns false
 	 */
-	public boolean addItem(Scanner scanner) {
+	public boolean addItem(Scanner scanner, boolean fromFile) {
 		boolean validData = false;											// Flag that indicates whether or not the user input data is valid
 			
 		// Get itemName
 		while (validData == false) {										// Loop until user inputs valid data
 			try {
-				System.out.print("Enter the name for the item: ");			// Display prompt
+				if (fromFile == false) {
+					System.out.print("Enter the name for the item: ");			// Display prompt
+				}
 				itemName = scanner.nextLine();								// Read in user input
 				
 				validData = true;											// If this code is reached, valid data has been successfully input and we can exit the loop
@@ -94,7 +100,9 @@ public class FoodItem implements Comparable<FoodItem> {
 		validData = false;													// Reset flag to false
 		while (validData == false) {										// Loop until user inputs valid data
 			try {
-				System.out.print("Enter the quantity for the item: ");		// Display prompt
+				if (fromFile == false) {
+					System.out.print("Enter the quantity for the item: ");		// Display prompt
+				}
 				itemQuantityInStock = scanner.nextInt();					// Take in user input
 				scanner.nextLine();											// Clear \n
 				
@@ -114,7 +122,9 @@ public class FoodItem implements Comparable<FoodItem> {
 		validData = false;													// Reset flag
 		while (validData == false) {										// Loop until user enters valid data
 			try {
-				System.out.print("Enter the cost of the item: ");			// Display prompt to user
+				if (fromFile == false) {
+					System.out.print("Enter the cost of the item: ");			// Display prompt to user
+				}
 				itemCost = scanner.nextFloat();								// Read in user input
 				scanner.nextLine();											// Clear scanner buffer
 				
@@ -135,7 +145,9 @@ public class FoodItem implements Comparable<FoodItem> {
 		validData = false;													// Reset flag
 		while (validData == false) {										// Loop until user enters valid data
 			try {
-				System.out.print("Enter the sales price of the item: ");	// Display prompt to user
+				if (fromFile == false) {
+					System.out.print("Enter the sales price of the item: ");	// Display prompt to user
+				}
 				itemPrice = scanner.nextFloat();							// Read in user input
 				scanner.nextLine();											// Clear scanner buffer
 				
@@ -156,7 +168,7 @@ public class FoodItem implements Comparable<FoodItem> {
 	/**
 	 * Compares the item code of the object this method is acting upon to a new item code.
 	 * Return true if the codes are the same. Return false if they are different.
-	 * @param newCode A potential new code to be added to the inventory.
+	 * @param newItem A potential new item to be added to the inventory.
 	 * @return true if the item codes match. Return false otherwise.
 	 */
 	public boolean isEqual(FoodItem newItem) {
@@ -168,15 +180,18 @@ public class FoodItem implements Comparable<FoodItem> {
 	 * Loop until the user inputs an integer.
 	 * 
 	 * @param scanner A scanner object used to read in user input.
+	 * @param fromFile Indicates whether or not the scanner is reading from a file.
 	 * @return true if successful.
 	 */
-	public boolean inputCode(Scanner scanner) {
+	public boolean inputCode(Scanner scanner, boolean fromFile){
 		boolean validData = false;											// Flag that indicates if the user-input data is valid
 		
 		// Get itemCode
 		while (validData == false) {										// Loop until user inputs valid data
 			try {
-				System.out.print("Enter the code for the item: ");			// Display prompt to user
+				if (fromFile == false) {
+					System.out.print("Enter the code for the item: ");		// Display prompt to user
+				}
 				itemCode = scanner.nextInt();								// Take in user input
 				scanner.nextLine();											// Clear \n from buffer
 				
@@ -187,5 +202,25 @@ public class FoodItem implements Comparable<FoodItem> {
 			}
 		}
 		return true;
+	}
+	/**
+	 * Writes a FoodItem's default data to a file.
+	 * 
+	 * @param writer The FileWriter object used to write to a given file.
+	 * @throws IOException When an error occurs while writing to a file.
+	 */
+	public void outputItem(FileWriter writer) throws IOException {
+		writer.write(itemCode + "\n" +
+					itemName + "\n" +
+					itemQuantityInStock + "\n" +
+					itemCost + "\n" +
+					itemPrice + "\n");	
+	}
+
+	/**
+	 * @return the itemCode
+	 */
+	public int getItemCode() {
+		return itemCode;
 	}
 }

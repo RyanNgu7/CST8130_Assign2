@@ -7,6 +7,8 @@
  * @author/Professor: James Mwangi PhD. 
  * 
   */
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 
 /**
@@ -46,14 +48,16 @@ public class Juice extends FoodItem {
 	 * @param scanner A scanner object used to read in user input.
 	 * @return true if the program successfully reads in all fields.
 	 */
-    public boolean addItem(Scanner scanner) {
-    	super.addItem(scanner);												// Prompt user to fill in default data member fields
+    public boolean addItem(Scanner scanner, boolean fromFile) {
+    	super.addItem(scanner, fromFile);									// Prompt user to fill in default data member fields
     	
     	// Get organic
 		boolean validData = false;											// Flag that indicates whether or not the data is valid
 		while (validData == false) {										// Loop until user enters valid data
 			try {
-				System.out.print("Is the juice organic (y/n)? ");			// Display prompt to user
+				if (fromFile == false) {
+					System.out.print("Is the juice organic (y/n)? ");		// Display prompt to user
+				}
 				String answer = scanner.nextLine();							// Take in user input
 				
 				switch(answer) {					
@@ -74,4 +78,21 @@ public class Juice extends FoodItem {
 		}
     	return true;
     }
+    
+    @Override
+    /**
+	 * {@inheritDoc}
+	 * <p>
+	 * Also writes j to signify the item is a juice and
+	 * whether or not the juice is organic.
+	 * </p>
+	 * 
+	 * @param writer The FileWriter used to write to a file.
+	 * @throws IOException
+	 */
+	public void outputItem(FileWriter writer) throws IOException {
+		writer.write("j\n");
+    	super.outputItem(writer);	
+    	writer.write(organic + "\n");
+	}
 }

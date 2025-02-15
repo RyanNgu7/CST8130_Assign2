@@ -7,6 +7,8 @@
  * @author/Professor: James Mwangi PhD. 
  * 
   */
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -46,14 +48,16 @@ public class Vegetable extends FoodItem {
 	 * @param scanner A scanner object used to read in user input.
 	 * @return true if the program successfully reads in all fields.
 	 */
-    public boolean addItem(Scanner scanner) {
-    	super.addItem(scanner);														// Prompt user to input default data member fields
+    public boolean addItem(Scanner scanner, boolean fromFile) {
+    	super.addItem(scanner, fromFile);											// Prompt user to input default data member fields
     		
     	// Get farmName
 		boolean validData = false;													// Flag that indicates whether or not the data is valid
 		while (validData == false) {												// Loop until the user inputs valid data
 			try {
-				System.out.print("Enter the name of the farm supplier: ");			// Display prompt
+				if (fromFile == false) {
+					System.out.print("Enter the name of the farm supplier: ");		// Display prompt
+				}
 				farmName = scanner.nextLine();										// Take in user input
 				
 				validData = true;													// If this code is reached, valid data has been successfully input and we can exit the loop
@@ -63,4 +67,21 @@ public class Vegetable extends FoodItem {
 		}
     	return true;
     }
+    
+    @Override
+    /**
+	 * {@inheritDoc}
+	 * <p>
+	 * Also writes v to signify the item is a vegetable and
+	 * the farm name.
+	 * </p>
+	 * 
+	 * @param writer The FileWriter used to write to a file.
+	 * @throws IOException
+	 */
+	public void outputItem(FileWriter writer) throws IOException {
+		writer.write("v\n");				// Writes "v" to signify this item is a vegetable
+    	super.outputItem(writer);			// Write the data members that are common to all FoodItem objects
+    	writer.write(farmName + "\n");		// Write the farm name to the file.
+	}
 }

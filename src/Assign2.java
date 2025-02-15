@@ -8,6 +8,8 @@
  * 
   */
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -29,15 +31,14 @@ public class Assign2 {
         boolean successFlag = false;													// Flag that indicates the success of a method
         
         int option = 0;																	// Set option to a value that will start the loop							
-        while (option != 5) {															// Loop until user decides to exit
+        while (option != 8) {															// Loop until user decides to exit
             displayMenu();
             try {
                 option = scanner.nextInt();												// Take in user input
-
                 switch(option) {
                 	// 1: Add Item to Inventory
                 	case 1:                		
-                		successFlag = inventory.addItem(scanner);
+                		successFlag = inventory.addItem(scanner, false);
                 		if (successFlag == false) {
                 			System.out.println("Inventory at max capacity");
                 		}
@@ -66,8 +67,22 @@ public class Assign2 {
                 			System.out.println("Error...could not sell item");
                 		}
                 		break;
-                    // 5: Exit
-                    case 5:
+                    // 5: Search for Item
+                	case 5:
+                		inventory.searchForItem(scanner);
+                		break;
+                	
+                	// 6: Save Inventory to File
+                	case 6:
+                		inventory.saveToFile(scanner);
+                		break;
+                	// 7: Read Inventory from File
+                	case 7:
+                		inventory.readFromFile(scanner);
+                		break;
+                		
+                	// 8: Exit
+                    case 8:
                         System.out.println("Exiting...");								// Display exit message
                         scanner.close();												// Close scanner instance
                         break;
@@ -79,7 +94,11 @@ public class Assign2 {
                 option = 0;                             								// Reset option to ensure loop continues
                 scanner.nextLine();														// Clear scanner buffer
                 System.out.println("Incorrect value entered");							// Display error message
-            }
+            } catch (FileNotFoundException fnfe) {
+            	System.out.println("File Not Found, ignoring...");
+            } catch (IOException ioe) {
+            	System.out.println("Error encountered while writing to a file, aborting...");
+            } 
         }
     }
     /**
@@ -91,7 +110,10 @@ public class Assign2 {
                         "2: Display Current Inventory\n" +
                         "3: Buy Item(s)\n" +
                         "4: Sell Item(s)\n" +
-                        "5: To Exit\n" +
+                        "5: Search for Item\n" +
+                        "6: Save Inventory to File\n" +
+                        "7: Read Inventory from File\n" +
+                        "8: To Exit\n" +
                         "> ");
     }
 }
